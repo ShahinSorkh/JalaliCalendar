@@ -687,25 +687,6 @@ class DateTime {
     }
 
     /**
-     * convert persian number to latin number
-     *
-     * @global array $ztjalali_option
-     *
-     * @param  string  $str  string for convertion
-     * @param  bool  $change_point_to_english  replace english [dot]? (Default true)
-     *
-     * @return string  converted string
-     */
-    public static function toEnglishNum($str, $change_point_to_english = true) {
-        if ($change_point_to_english)
-        $farsi_array = array("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹", "،");
-        else
-        $farsi_array = array("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹", ",");
-        $english_array = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",");
-        return str_replace($farsi_array, $english_array, $str);
-    }
-
-    /**
      * return week name
      *
      * @param  int  $gWeek  index of day in gregorian week (zero-based)
