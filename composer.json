@@ -4,19 +4,28 @@
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/ShahinSorkh/JalaliCalendar",
-  "keywords": ["calendar", "iranian", "persian", "jalali", "jalali calendar", "taghvim shamsi"],
+  "keywords": [
+    "calendar",
+    "iranian",
+    "persian",
+    "jalali",
+    "jalali calendar",
+    "taghvim shamsi"
+  ],
   "authors": [
     {
       "name": "Shahin Sorkh",
       "email": "sorkh.shahin@hotmail.com"
-        }
-    ],
+    }
+  ],
   "require": {
     "php": ">=5"
   },
   "autoload": {
     "psr-4": {
-      "Jalali\\": ["src/"]
+      "Jalali\\": [
+        "src/"
+      ]
     }
   }
 }
