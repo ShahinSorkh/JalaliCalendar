@@ -51,14 +51,14 @@ class Convertor {
      *
      * @return string  converted string
      */
-    public static function arabicToPersian($cotent, $persian_num = true) {
+    public static function arabicToPersian($content, $persian_num = true) {
         $temp = self::numToPersian($content);
         $temp = str_replace(
             array('ي', 'ك', 'ة'),
             array('ی', 'ک', 'ه'),
             $temp
         );
-        return $persian_num ? $temp:self::numToEnglish();
+        return $persian_num ? $temp:self::numToEnglish($content);
     }
 
 }
