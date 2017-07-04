@@ -522,9 +522,9 @@ class DateTime {
      * @return array  array('jyear' => 'jalali year', 'jmonth' => 'jalali month', 'jday' => 'jalali day')
      */
     public static function gregorianToJalali($g_y, $g_m, $g_d) {
-	$g_y = Convertor::numToEnglish($g_y);
-	$g_m = Convertor::numToEnglish($g_m);
-	$g_d = Convertor::numToEnglish($g_d);
+	$g_y = (int) Convertor::numToEnglish($g_y);
+	$g_m = (int) Convertor::numToEnglish($g_m);
+	$g_d = (int) Convertor::numToEnglish($g_d);
 
         $gy = $g_y - 1600;
         $gm = $g_m - 1;
