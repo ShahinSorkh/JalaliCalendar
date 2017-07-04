@@ -572,6 +572,10 @@ class DateTime {
      * @return array  array('gyear' => 'gregorian year', 'gmonth' => 'gregorian month', 'gday' => 'gregorian day')
      */
     public static function jalaliToGregorian($j_y, $j_m, $j_d) {
+	$j_y = (int) Convertor::numToEnglish($j_y);
+	$j_m = (int) Convertor::numToEnglish($j_m);
+	$j_d = (int) Convertor::numToEnglish($j_d);
+
         $jy = $j_y - 979;
         $jm = $j_m - 1;
         $j_day_no = (365 * $jy + self::_intDiv($jy, 33) * 8 + self::_intDiv($jy % 33 + 3, 4));
