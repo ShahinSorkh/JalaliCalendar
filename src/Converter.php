@@ -15,7 +15,7 @@ class Converter
     /**
      * convert english and arabic numbers to persian
      *
-     * @param  string $content string for convertion
+     * @param  string $content string for conversion
      *
      * @return string  converted string
      */
@@ -32,7 +32,7 @@ class Converter
     /**
      * convert persian and arabic numbers to english
      *
-     * @param  string $content string for convertion
+     * @param  string $content string for conversion
      *
      * @return string  converted string
      */
@@ -49,7 +49,7 @@ class Converter
     /**
      * convert arabic 'ک', 'ی', 'ه' and numbers to persian.
      *
-     * @param  string $content string for convertion
+     * @param  string $content string for conversion
      * @param  bool $persian_num convert numbers to persian?
      *
      * @return string  converted string

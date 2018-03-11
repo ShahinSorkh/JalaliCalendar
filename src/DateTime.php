@@ -14,29 +14,29 @@
 namespace ShSo\Jalali;
 
 /**
- * Jalali equivalnt of native php date/time functions
+ * Jalali equivalent of native php date/time functions
  */
 class DateTime
 {
 
-    private static $_famonth_name = array( // keys are in the right order
+    private static $_famonth_name = [ // keys are in the right order
         '', 'فروردین', 'اردیبهشت', 'خرداد',
         'تیر', 'مرداد', 'شهریور',
         'مهر', 'آبان', 'آذر',
         'دی', 'بهمن', 'اسفند'
-    );
-    private static $_enmonth_name = array(
+    ];
+    private static $_enmonth_name = [
         '', 'Farvardin', 'Ordibehesht', 'Khordad',
         'Tir', 'Mordad', 'Shahrivar',
         'Mehr', 'Aban', 'Azar',
         'Dey', 'Bahman', 'Esfand'
-    );
-    private static $_jdays_in_month = array(0, 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29);
-    private static $_gdays_in_month = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-    private static $_faweek_short_name = array('ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج');
-    private static $_faweek_name = array('شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنج شنبه', 'جمعه');
-    private static $_enweek_short_name = array('Sat', 'Suny', 'Mon', 'Teu', 'Wed', 'Thu', 'Fri');
-    private static $_enweek_name = array('Saturday', 'Sunday', 'Monday', 'Teusday', 'Wednesday', 'Thursday', 'Friday');
+    ];
+    private static $_jdays_in_month = [0, 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+    private static $_gdays_in_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    private static $_faweek_short_name = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+    private static $_faweek_name = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنج شنبه', 'جمعه'];
+    private static $_enweek_short_name = ['Sat', 'Sun', 'Mon', 'Teu', 'Wed', 'Thu', 'Fri'];
+    private static $_enweek_name = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
     /**
      * The format of the outputted date string (jalali equivalent of php date() function)
@@ -45,7 +45,7 @@ class DateTime
      *
      * @param  string $format For example 'Y-m-d H:i:s'
      * @param  int|string $timestamp [optional] Null for current time<br />
-     *         formated datetime to use as strtotime arg<br />
+     *         formatted datetime to use as strtotime arg<br />
      *            int for custom unix timestamp
      * @param  array $opt [optional] array(<br />
      *         'timezone' => Passed directly to 'new DateTimeZone($timezone)',
@@ -76,7 +76,7 @@ class DateTime
             $timestamp += $deff_time;
         }
 
-        // Create date needed parametrs
+        // Create date needed parameters
         // get gregorian parameters and convert them to jalali
         list($gYear, $gMonth, $gDay, $gWeek) = explode('-', date('Y-m-d-w', $timestamp));
         $jdate = self::gregorianToJalali($gYear, $gMonth, $gDay);
@@ -91,7 +91,7 @@ class DateTime
         if ($format == "\\") {
             $format = '//';
         }
-        // Go through $format and output formated result
+        // Go through $format and output formatted result
         $lenghFormat = strlen($format);
         $i = 0;
         $result = "";
@@ -235,7 +235,7 @@ class DateTime
         if (!$timestamp) {
             $timestamp = time();
         }
-        // Create date needed parametrs
+        // Create date needed parameters
         // Get gregorian parameters and convert them to jalali
         list($gYear, $gMonth, $gDay, $gWeek) = explode('-', date('Y-m-d-w', $timestamp));
         $jdate = self::gregorianToJalali($gYear, $gMonth, $gDay);
@@ -246,7 +246,7 @@ class DateTime
         if ($pWeek >= 7) {
             $pWeek = 0;
         }
-        // Go through $format and output formated result
+        // Go through $format and output formatted result
         $lenghFormat = strlen($format);
         $i = 0;
         $result = '';
@@ -356,7 +356,6 @@ class DateTime
                         break;
                     // Time and Date Stamps
                     case 'c':
-                        $month = ($opt['in_persian']) ? (self::$_famonth_name[$pMonth]) : (self::$_enmonth_name[$pMonth]);
                         $result .= self::strftime("%y", $timestamp, $opt);
                         $result .= "/" . self::strftime("%m", $timestamp, $opt) . "/";
                         $result .= self::strftime("%d", $timestamp, $opt) . " ";
@@ -506,7 +505,7 @@ class DateTime
         }
 
         list($seconds, $minutes, $hours, $mday, $wday, $mon, $year, $yday, $weekday, $month) = explode(
-            '-', self::date('s-i-G-j-w-n-Y-z-l-F', $timestamp, false, false)
+            '-', self::date('s-i-G-j-w-n-Y-z-l-F', $timestamp, ['timezone' => false, 'in_persian' => false])
         );
         return array(
             0 => $timestamp, 'seconds' => $seconds, 'minutes' => $minutes, 'hours' => $hours,
@@ -516,10 +515,7 @@ class DateTime
     }
 
     /**
-     * gregorian to jalali convertion
-     *
-     * @staticvar  array  $_g_days_in_month
-     * @staticvar  array  $_j_days_in_month
+     * gregorian to jalali conversion
      *
      * @param  int $g_y gregorian year
      * @param  int $g_m gregorian month
@@ -558,8 +554,7 @@ class DateTime
             $j_day_no %= 365;
         }
 
-        $i = 0;
-        for ($i; ($i < 11 && $j_day_no >= self::$_jdays_in_month[$i + 1]); ++$i) {
+        for ($i = 0; ($i < 11 && $j_day_no >= self::$_jdays_in_month[$i + 1]); ++$i) {
             $j_day_no -= self::$_jdays_in_month[$i + 1];
         }
 
@@ -571,10 +566,7 @@ class DateTime
     }
 
     /**
-     * jalali to gregorian convertion
-     *
-     * @staticvar  array  $_g_days_in_month
-     * @staticvar  array  $_j_days_in_month
+     * jalali to gregorian conversion
      *
      * @param  int $j_y jalali year
      * @param  int $j_m jalali month
@@ -623,8 +615,7 @@ class DateTime
             $g_day_no = ($g_day_no % 365);
         }
 
-        $i = 0;
-        for ($i; $g_day_no >= (self::$_gdays_in_month[$i + 1] + ($i == 1 && $leap)); $i++) {
+        for ($i = 0; $g_day_no >= (self::$_gdays_in_month[$i + 1] + ($i == 1 && $leap)); $i++) {
             $g_day_no -= (self::$_gdays_in_month[$i + 1] + ($i == 1 && $leap));
         }
 
@@ -657,7 +648,7 @@ class DateTime
      *
      * @param  int $year jalali year
      *
-     * @return bool  true if is, flase if is not
+     * @return bool  true if is, false if is not
      */
     public static function isLeapYear($year)
     {
@@ -690,6 +681,7 @@ class DateTime
      * return jalali name of month from month number
      *
      * @param  int $month jalali month
+     * @param bool $full_name whether to get full names or short names
      * @param  bool $get_in_persian get persian names? (Default true)
      *
      * @return string  name of month
@@ -701,7 +693,6 @@ class DateTime
             return ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
         } else {
             $month = ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
-            $m = ($get_in_persian) ? substr($month, 0, 6) : substr($month, 0, 3);
             return ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
         }
     }
