@@ -20,16 +20,20 @@ class DateTime
 {
 
     private static $_famonth_name = [ // keys are in the right order
-        '', 'فروردین', 'اردیبهشت', 'خرداد',
-        'تیر', 'مرداد', 'شهریور',
-        'مهر', 'آبان', 'آذر',
-        'دی', 'بهمن', 'اسفند'
+        '', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+        'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
     ];
     private static $_enmonth_name = [
-        '', 'Farvardin', 'Ordibehesht', 'Khordad',
-        'Tir', 'Mordad', 'Shahrivar',
-        'Mehr', 'Aban', 'Azar',
-        'Dey', 'Bahman', 'Esfand'
+        '', 'Farvardin', 'Ordibehesht', 'Khordad', 'Tir', 'Mordad', 'Shahrivar',
+        'Mehr', 'Aban', 'Azar', 'Dey', 'Bahman', 'Esfand'
+    ];
+    private static $_famonth_short_name = [ // keys are in the right order
+        '', 'فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر',
+        'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسفن'
+    ];
+    private static $_enmonth_short_name = [
+        '', 'Far', 'Ord', 'Kho', 'Tir', 'Mor', 'Sha',
+        'Meh', 'Aba', 'Aza', 'Dey', 'Bah', 'Esf'
     ];
     private static $_jdays_in_month = [0, 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
     private static $_gdays_in_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -56,6 +60,10 @@ class DateTime
      */
     public static function date($format, $timestamp = null, $opt = ['timezone' => 'local', 'in_persian' => true])
     {
+        $opt = [
+            'timezone' => isset($opt) && is_array($opt) && array_key_exists('timezone', $opt) ? $opt['timezone'] : 'local',
+            'in_persian' => isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true,
+        ];
         // initialize $timestamp
         if (!$timestamp)
             $timestamp = time();
@@ -231,6 +239,9 @@ class DateTime
      */
     public static function strftime($format, $timestamp = null, $opt = ['in_persian' => true])
     {
+        $opt = [
+            'in_persian' => isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true,
+        ];
         // initialize $timestamp
         if (!$timestamp) {
             $timestamp = time();
@@ -681,19 +692,22 @@ class DateTime
      * return jalali name of month from month number
      *
      * @param  int $month jalali month
-     * @param bool $full_name whether to get full names or short names
-     * @param  bool $get_in_persian get persian names? (Default true)
+     * @param array $opt internal params $full_name and $get_in_persian
+     * @internal  bool $full_name whether to get full names or short names
+     * @internal  bool $get_in_persian get persian names? (Default true)
      *
      * @return string  name of month
      */
-    public static function getMonthName($month, $full_name = true, $get_in_persian = true)
+    public static function getMonthName($month, $opt = ['full_name' => true, 'in_persian' => true])
     {
+        $full_name = isset($opt) && is_array($opt) && array_key_exists('full_name', $opt) ? $opt['full_name'] : true;
+        $get_in_persian = isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true;
         $month = (int)$month;
+
         if ($full_name) {
             return ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
         } else {
-            $month = ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
-            return ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
+            return ($get_in_persian) ? self::$_famonth_short_name[$month] : self::$_enmonth_short_name[$month];
         }
     }
 
