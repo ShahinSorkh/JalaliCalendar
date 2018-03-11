@@ -1,4 +1,6 @@
 # JalaliCalendar
+A php native-like package for use of persians and everyone who uses
+jalali calendar and wants to get rid of arabic characters in their php applications.
 
 ## Instalation
 You can use [composer](http://getcomposer.org) to install this calendar
@@ -7,14 +9,14 @@ $ composer require sorkh.shahin/jalalicalendar
 ````
 
 ## Usage
-This package is under `Jalali` namespace and does two things:
-1. Provide jalali date/time using `Jalali\DateTime` class
-1. Converts english and arabic numbers to persian and vice versa using `Jalali\Convertor` class
+This package is under `ShSo\Jalali` namespace and does two things:
+1. Provides jalali date/time using `ShSo\Jalali\DateTime` class
+1. Converts english and arabic numbers to persian and vice versa using `ShSo\Jalali\Converter` class
 
 ### How to use
-All methods and functionalities are static methods of the classes `Jalali\DateTime` and `Jalali\Convertor`
+All methods and functionalities are static methods of the classes `ShSo\Jalali\DateTime` and `ShSo\Jalali\Converter`
 
-`Jalali\DateTime` provides:
+`ShSo\Jalali\DateTime` provides:
 * `date()`
 _Jalali equivalent of php native date() function with options to
 choose whether use persian numbers and choose diffrent timezones_
@@ -44,7 +46,7 @@ _Returns day of week in gregorian order whether in persian or english_
 * `getShortWeekName()`
 _Returns day of week in gregorian order in 3 letters whether in persian or english_
 
-`Jalali\Convertor` provides:
+`ShSo\Jalali\Converter` provides:
 * `numToPersian()`
 _Converts all numbers whether in english or arabic to persian_
 * `numToEnglish()`
