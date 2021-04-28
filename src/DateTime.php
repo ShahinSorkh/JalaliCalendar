@@ -69,8 +69,8 @@ class DateTime
             $timestamp = time();
         elseif (!is_numeric($timestamp))
             $timestamp = strtotime($timestamp);
-        elseif (!is_integer($timestamp))
-            $timestamp = intval($timestamp);
+        elseif (!is_int($timestamp))
+            $timestamp = (int)$timestamp;
         // initialize $timezone
         $timezone = $opt['timezone'];
         if ($timezone === 'local' || $timezone === false) {
@@ -86,7 +86,7 @@ class DateTime
 
         // Create date needed parameters
         // get gregorian parameters and convert them to jalali
-        list($gYear, $gMonth, $gDay, $gWeek) = explode('-', date('Y-m-d-w', $timestamp));
+        [$gYear, $gMonth, $gDay, $gWeek] = explode('-', date('Y-m-d-w', $timestamp));
         $jdate = self::gregorianToJalali($gYear, $gMonth, $gDay);
         $pYear = $jdate['jyear'];
         $pMonth = $jdate['jmonth'];
@@ -104,9 +104,9 @@ class DateTime
         $i = 0;
         $result = "";
         while ($i < $lenghFormat) {
-            $par = $format{$i};
+            $par = $format[$i];
             if ($par == "\\") {
-                $result .= $format{++$i};
+                $result .= $format[++$i];
                 $i++;
                 continue;
             }
@@ -122,7 +122,7 @@ class DateTime
                     $result .= $pDay;
                     break;
                 case 'l':
-                    $result .= ($opt['in_persian']) ? (self::$_faweek_name[$pWeek]) : (self::$_enweek_name[$pWeek]);;
+                    $result .= ($opt['in_persian']) ? (self::$_faweek_name[$pWeek]) : (self::$_enweek_name[$pWeek]);
                     break;
                 case 'N':
                     $result .= $pWeek + 1;
@@ -248,7 +248,7 @@ class DateTime
         }
         // Create date needed parameters
         // Get gregorian parameters and convert them to jalali
-        list($gYear, $gMonth, $gDay, $gWeek) = explode('-', date('Y-m-d-w', $timestamp));
+        [$gYear, $gMonth, $gDay, $gWeek] = explode('-', date('Y-m-d-w', $timestamp));
         $jdate = self::gregorianToJalali($gYear, $gMonth, $gDay);
         $pYear = $jdate['jyear'];
         $pMonth = $jdate['jmonth'];
@@ -262,9 +262,9 @@ class DateTime
         $i = 0;
         $result = '';
         while ($i < $lenghFormat) {
-            $par = $format{$i};
+            $par = $format[$i];
             if ($par == '%') {
-                $type = $format{++$i};
+                $type = $format[++$i];
                 switch ($type) {
                     // Day
                     case 'a':
@@ -272,7 +272,7 @@ class DateTime
                         break;
 
                     case 'A':
-                        $result .= ($opt['in_persian']) ? (self::$_faweek_name[$pWeek]) : (self::$_enweek_name[$pWeek]);;
+                        $result .= ($opt['in_persian']) ? (self::$_faweek_name[$pWeek]) : (self::$_enweek_name[$pWeek]);
                         break;
 
                     case 'd':
@@ -285,7 +285,7 @@ class DateTime
 
                     case 'j':
                         $dayinM = self::dayOfYear($pMonth, $pDay);
-                        $result .= (($dayinM < 10) ? '00' . $dayinM : ($dayinM < 100) ? '0' . $dayinM : $dayinM);
+                        $result .= (($dayinM < 10) ? '00' . $dayinM : (($dayinM < 100) ? '0' . $dayinM : $dayinM));
                         break;
 
                     case 'u':
@@ -357,9 +357,9 @@ class DateTime
                     case 'r':
                         if ($opt['in_persian']) {
                             if (date('a', $timestamp) == 'am') {
-                                $result .= (($type == 'p') ? 'ق.ظ' : ($type == 'P') ? 'قبل از ظهر' : strftime("%I:%M:%S قبل از ظهر", $timestamp));
+                                $result .= (($type == 'p') ? 'ق.ظ' : (($type == 'P') ? 'قبل از ظهر' : strftime("%I:%M:%S قبل از ظهر", $timestamp)));
                             } else {
-                                $result .= (($type == 'p') ? 'ب.ظ' : ($type == 'P') ? 'بعد از ظهر' : strftime("%I:%M:%S بعد از ظهر", $timestamp));
+                                $result .= (($type == 'p') ? 'ب.ظ' : (($type == 'P') ? 'بعد از ظهر' : strftime("%I:%M:%S بعد از ظهر", $timestamp)));
                             }
                         } else {
                             $result .= strftime('%' . $type, $timestamp);
@@ -449,18 +449,10 @@ class DateTime
      *         Values less than 1 (including negative values) reference the days in the previous month,
      *         so 0 is the last day of the previous month, -1 is the day before that, etc.
      *         Values greater than the number of days in the relevant month reference the appropriate day in the following month(s).
-     * @param  int $is_dst [optional] <br />
-     *         This parameter can be set to 1 if the time is during daylight savings time (DST), 0 if it is not,
-     *         or -1 (the default) if it is unknown whether the time is within daylight savings time or not.
-     *         If it's unknown, PHP tries to figure it out itself. This can cause unexpected (but not incorrect) results.
-     *         Some times are invalid if DST is enabled on the system PHP is running on or is_dst is set to 1.
-     *         If DST is enabled in e.g. 2:00, all times between 2:00 and 3:00 are invalid and mktime()
-     *         returns an undefined (usually negative) value. Some systems (e.g. Solaris 8) enable DST at midnight
-     *         so time 0:30 of the day when DST is enabled is evaluated as 23:30 of the previous day.
      *
      * @return int  Unix timestamp
      */
-    public static function mktime($hour = 0, $minute = 0, $second = 0, $year = 0, $month = 0, $day = 0, $is_dst = -1)
+    public static function mktime($hour = 0, $minute = 0, $second = 0, $year = 0, $month = 0, $day = 0)
     {
         if (($hour == 0) && ($minute == 0) && ($second == 0) && ($month == 0) && ($day == 0) && ($year == 0)) {
             return time();
@@ -469,7 +461,7 @@ class DateTime
         $year = $jdate['gyear'];
         $month = $jdate['gmonth'];
         $day = $jdate['gday'];
-        return mktime($hour, $minute, $second, $month, $day, $year, $is_dst);
+        return mktime($hour, $minute, $second, $month, $day, $year);
     }
 
     /**
@@ -515,7 +507,7 @@ class DateTime
             $timestamp = time();
         }
 
-        list($seconds, $minutes, $hours, $mday, $wday, $mon, $year, $yday, $weekday, $month) = explode(
+        [$seconds, $minutes, $hours, $mday, $wday, $mon, $year, $yday, $weekday, $month] = explode(
             '-', self::date('s-i-G-j-w-n-Y-z-l-F', $timestamp, ['timezone' => false, 'in_persian' => false])
         );
         return array(
@@ -602,13 +594,13 @@ class DateTime
         $j_day_no += $j_d - 1;
         $g_day_no = $j_day_no + 79;
         $gy = (1600 + 400 * self::_intDiv($g_day_no, 146097)); // 146097 = (365 * 400 + 400 / 4 - 400 / 100 + 400 / 400)
-        $g_day_no = $g_day_no % 146097;
+        $g_day_no %= 146097;
         $leap = 1;
 
         if ($g_day_no >= 36525) { // 36525 = (365 * 100 + 100 / 4)
             $g_day_no--;
             $gy += (100 * self::_intDiv($g_day_no, 36524)); // 36524 = (365 * 100 + 100 / 4 - 100 / 100)
-            $g_day_no = $g_day_no % 36524;
+            $g_day_no %= 36524;
             if ($g_day_no >= 365) {
                 $g_day_no++;
             } else {
@@ -623,7 +615,7 @@ class DateTime
             $leap = 0;
             $g_day_no--;
             $gy += self::_intDiv($g_day_no, 365);
-            $g_day_no = ($g_day_no % 365);
+            $g_day_no %= 365;
         }
 
         for ($i = 0; $g_day_no >= (self::$_gdays_in_month[$i + 1] + ($i == 1 && $leap)); $i++) {
@@ -665,10 +657,7 @@ class DateTime
     {
         $mod = $year % 33;
 
-        if ($mod == 1 || $mod == 5 || $mod == 9 || $mod == 13 || $mod == 17 || $mod == 22 || $mod == 26 || $mod == 30) {
-            return true;
-        }
-        return false;
+        return $mod == 1 || $mod == 5 || $mod == 9 || $mod == 13 || $mod == 17 || $mod == 22 || $mod == 26 || $mod == 30;
     }
 
     /**
@@ -681,7 +670,7 @@ class DateTime
      */
     public static function dayOfMonth($month, $year = 33)
     {
-        if (self::isLeapYear($year) && ($month == 12))
+        if (($month == 12) && self::isLeapYear($year))
             return 30;
 
         $month = (int)$month;
@@ -700,15 +689,15 @@ class DateTime
      */
     public static function getMonthName($month, $opt = ['full_name' => true, 'in_persian' => true])
     {
-        $full_name = isset($opt) && is_array($opt) && array_key_exists('full_name', $opt) ? $opt['full_name'] : true;
+        $full_name = !(isset($opt) && is_array($opt) && array_key_exists('full_name', $opt)) || $opt['full_name'];
         $get_in_persian = isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true;
         $month = (int)$month;
 
         if ($full_name) {
             return ($get_in_persian) ? self::$_famonth_name[$month] : self::$_enmonth_name[$month];
-        } else {
-            return ($get_in_persian) ? self::$_famonth_short_name[$month] : self::$_enmonth_short_name[$month];
         }
+
+        return ($get_in_persian) ? self::$_famonth_short_name[$month] : self::$_enmonth_short_name[$month];
     }
 
     /**
