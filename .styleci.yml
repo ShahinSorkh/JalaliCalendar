@@ -1,8 +1,2 @@
 php:
   preset: laravel
-
-js: false
-ts: false
-css: false
-vue: false
-py: false
