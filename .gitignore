@@ -8,3 +8,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 .idea/
+vendor/
+.php_cs.cache

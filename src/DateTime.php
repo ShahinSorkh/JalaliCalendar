@@ -22,23 +22,32 @@ class DateTime
         '', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
         'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند',
     ];
+
     private static $_enmonth_name = [
         '', 'Farvardin', 'Ordibehesht', 'Khordad', 'Tir', 'Mordad', 'Shahrivar',
         'Mehr', 'Aban', 'Azar', 'Dey', 'Bahman', 'Esfand',
     ];
+
     private static $_famonth_short_name = [ // keys are in the right order
         '', 'فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر',
         'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسفن',
     ];
+
     private static $_enmonth_short_name = [
         '', 'Far', 'Ord', 'Kho', 'Tir', 'Mor', 'Sha',
         'Meh', 'Aba', 'Aza', 'Dey', 'Bah', 'Esf',
     ];
+
     private static $_jdays_in_month = [0, 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+
     private static $_gdays_in_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
     private static $_faweek_short_name = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
     private static $_faweek_name = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنج شنبه', 'جمعه'];
+
     private static $_enweek_short_name = ['Sat', 'Sun', 'Mon', 'Teu', 'Wed', 'Thu', 'Fri'];
+
     private static $_enweek_name = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
     /**
@@ -55,20 +64,20 @@ class DateTime
      *                              you can use 'local' to avoid overriding (Default 'local'),<br />
      *                              'in_persian' => Convert numbers to persian? (Default true)<br />)
      *
-     * @return string Returns a formatted datetime string.
+     * @return string returns a formatted datetime string
      */
     public static function date($format, $timestamp = null, $opt = ['timezone' => 'local', 'in_persian' => true])
     {
         $opt = [
-            'timezone'   => isset($opt) && is_array($opt) && array_key_exists('timezone', $opt) ? $opt['timezone'] : 'local',
+            'timezone' => isset($opt) && is_array($opt) && array_key_exists('timezone', $opt) ? $opt['timezone'] : 'local',
             'in_persian' => isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true,
         ];
         // initialize $timestamp
-        if (!$timestamp) {
+        if (! $timestamp) {
             $timestamp = time();
-        } elseif (!is_numeric($timestamp)) {
+        } elseif (! is_numeric($timestamp)) {
             $timestamp = strtotime($timestamp);
-        } elseif (!is_int($timestamp)) {
+        } elseif (! is_int($timestamp)) {
             $timestamp = (int) $timestamp;
         }
         // initialize $timezone
@@ -108,30 +117,38 @@ class DateTime
             if ($par == '\\') {
                 $result .= $format[++$i];
                 $i++;
+
                 continue;
             }
             switch ($par) {
                 // Day
                 case 'd':
                     $result .= (($pDay < 10) ? ('0'.$pDay) : $pDay);
+
                     break;
                 case 'D':
                     $result .= ($opt['in_persian']) ? (self::$_faweek_short_name[$pWeek]) : (self::$_enweek_short_name[$pWeek]);
+
                     break;
                 case 'j':
                     $result .= $pDay;
+
                     break;
                 case 'l':
                     $result .= ($opt['in_persian']) ? (self::$_faweek_name[$pWeek]) : (self::$_enweek_name[$pWeek]);
+
                     break;
                 case 'N':
                     $result .= $pWeek + 1;
+
                     break;
                 case 'w':
                     $result .= $pWeek;
+
                     break;
                 case 'z':
                     $result .= self::dayOfYear($pMonth, $pDay);
+
                     break;
                 case 'S':
                     if ($opt['in_persian']) {
@@ -139,39 +156,49 @@ class DateTime
                     } else {
                         $result .= date($par, $timestamp);
                     }
+
                     break;
                 // Week
                 case 'W':
                     $result .= ceil(self::dayOfYear($pMonth, $pDay) / 7);
+
                     break;
                 // Month
                 case 'F':
                     $result .= ($opt['in_persian']) ? (self::$_famonth_name[$pMonth]) : (self::$_enmonth_name[$pMonth]);
+
                     break;
                 case 'm':
                     $result .= (($pMonth < 10) ? ('0'.$pMonth) : $pMonth);
+
                     break;
                 case 'M':
                     $month = ($opt['in_persian']) ? (self::$_famonth_name[$pMonth]) : (self::$_enmonth_name[$pMonth]);
                     $m = ($opt['in_persian']) ? substr($month, 0, 6) : substr($month, 0, 3);
                     $result .= $m;
+
                     break;
                 case 'n':
                     $result .= $pMonth;
+
                     break;
                 case 't':
                     $result .= self::dayOfMonth($pMonth, $pYear);
+
                     break;
                 // Years
                 case 'L':
                     $result .= (self::isLeapYear($pYear)) ? 1 : 0;
+
                     break;
                 case 'Y':
                 case 'o':
                     $result .= $pYear;
+
                     break;
                 case 'y':
                     $result .= substr($pYear, 2);
+
                     break;
                 // Time
                 case 'a':
@@ -185,6 +212,7 @@ class DateTime
                     } else {
                         $result .= date($par, $timestamp);
                     }
+
                     break;
                 case 'B':
                 case 'g':
@@ -202,19 +230,23 @@ class DateTime
                 case 'T':
                 case 'Z':
                     $result .= date($par, $timestamp);
+
                     break;
                 // Full Date/Time
                 case 'c':
                     $result .= ($pYear.'-'.$pMonth.'-'.$pDay.' '.date('H:i:s P', $timestamp));
+
                     break;
                 case 'r':
                     $month = ($opt['in_persian']) ? (self::$_famonth_name[$pMonth]) : (self::$_enmonth_name[$pMonth]);
                     $result .= ($opt['in_persian']) ? (self::$_faweek_short_name[$pWeek]) : (self::$_enweek_short_name[$pWeek]);
                     $result .= '. '.$pDay.' ';
                     $result .= $month.' '.$pYear.' '.date('H:i:s P', $timestamp);
+
                     break;
                 case 'U':
                     $result .= $timestamp;
+
                     break;
                 default:
                     $result .= $par;
@@ -238,7 +270,7 @@ class DateTime
      * @param array      $opt       [optional] array(<br />
      *                              'in_persian' => convert numbers to persian? (Default true)<br />)
      *
-     * @return string Returns a formatted datetime string.
+     * @return string returns a formatted datetime string
      */
     public static function strftime($format, $timestamp = null, $opt = ['in_persian' => true])
     {
@@ -246,7 +278,7 @@ class DateTime
             'in_persian' => isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true,
         ];
         // initialize $timestamp
-        if (!$timestamp) {
+        if (! $timestamp) {
             $timestamp = time();
         }
         // Create date needed parameters
@@ -272,41 +304,50 @@ class DateTime
                     // Day
                     case 'a':
                         $result .= ($opt['in_persian']) ? (self::$_faweek_short_name[$pWeek]) : (self::$_enweek_short_name[$pWeek]);
+
                         break;
 
                     case 'A':
                         $result .= ($opt['in_persian']) ? (self::$_faweek_name[$pWeek]) : (self::$_enweek_name[$pWeek]);
+
                         break;
 
                     case 'd':
                         $result .= (($pDay < 10) ? '0'.$pDay : $pDay);
+
                         break;
 
                     case 'e':
                         $result .= $pDay;
+
                         break;
 
                     case 'j':
                         $dayinM = self::dayOfYear($pMonth, $pDay);
                         $result .= (($dayinM < 10) ? '00'.$dayinM : (($dayinM < 100) ? '0'.$dayinM : $dayinM));
+
                         break;
 
                     case 'u':
                         $result .= $pWeek + 1;
+
                         break;
 
                     case 'w':
                         $result .= $pWeek;
+
                         break;
 
                     // Week
                     case 'U':
                         $result .= floor(self::dayOfYear($pMonth, $pDay) / 7);
+
                         break;
 
                     case 'V':
                     case 'W':
                         $result .= ceil(self::dayOfYear($pMonth, $pDay) / 7);
+
                         break;
 
                     // Month
@@ -315,30 +356,36 @@ class DateTime
                         $month = ($opt['in_persian']) ? (self::$_famonth_name[$pMonth]) : (self::$_enmonth_name[$pMonth]);
                         $m = ($opt['in_persian']) ? substr($month, 0, 6) : substr($month, 0, 3);
                         $result .= $m;
+
                         break;
 
                     case 'B':
                         $month = ($opt['in_persian']) ? (self::$_famonth_name[$pMonth]) : (self::$_enmonth_name[$pMonth]);
                         $result .= $month;
+
                         break;
 
                     case 'm':
                         $result .= (($pMonth < 10) ? '0'.$pMonth : $pMonth);
+
                         break;
 
                     // Year
                     case 'C':
                         $result .= ceil($pYear / 100);
+
                         break;
 
                     case 'g':
                     case 'y':
                         $result .= substr($pYear, 2);
+
                         break;
 
                     case 'G':
                     case 'Y':
                         $result .= $pYear;
+
                         break;
 
                     // Time
@@ -353,6 +400,7 @@ class DateTime
                     case 'z':
                     case 'Z':
                         $result .= strftime('%'.$type, $timestamp);
+
                         break;
 
                     case 'p':
@@ -367,6 +415,7 @@ class DateTime
                         } else {
                             $result .= strftime('%'.$type, $timestamp);
                         }
+
                         break;
                     // Time and Date Stamps
                     case 'c':
@@ -374,34 +423,41 @@ class DateTime
                         $result .= '/'.self::strftime('%m', $timestamp, $opt).'/';
                         $result .= self::strftime('%d', $timestamp, $opt).' ';
                         $result .= self::strftime('%H:%M:%S ', $timestamp, $opt);
+
                         break;
 
                     case 'D':
                     case 'x':
                         $result .= substr($pYear, 2).'/'.(($pMonth < 10) ? '0'.$pMonth : $pMonth).'/';
                         $result .= (($pDay < 10) ? '0'.$pDay : $pDay);
+
                         break;
 
                     case 'F':
                         $result .= $pYear.'/'.(($pMonth < 10) ? '0'.$pMonth : $pMonth).'/';
                         $result .= ($pDay < 10) ? '0'.$pDay : $pDay;
+
                         break;
 
                     case 's':
                         $result .= $timestamp;
+
                         break;
 
                     // Miscellaneous
                     case 'n':
                         $result .= "\n";
+
                         break;
 
                     case 't':
                         $result .= "\t";
+
                         break;
 
                     case '%':
                         $result .= '%';
+
                         break;
 
                     default:
@@ -475,11 +531,11 @@ class DateTime
      *
      * @link http://php.net/en/manual/function.checkdate.php
      *
-     * @param int $year  The year is between 1 and 32767 inclusive.
-     * @param int $month The month is between 1 and 12 inclusive.
+     * @param int $year  the year is between 1 and 32767 inclusive
+     * @param int $month the month is between 1 and 12 inclusive
      * @param int $day   The day is within the allowed number of days for the given month. Leap years are taken into consideration.
      *
-     * @return bool Returns TRUE if the date given is valid; otherwise returns false.
+     * @return bool returns TRUE if the date given is valid; otherwise returns false
      */
     public static function checkdate($year, $month, $day)
     {
@@ -488,7 +544,7 @@ class DateTime
         }
 
         if ($day > self::$_jdays_in_month[$month]) {
-            if (($month != 12) || ($day != 30) || !self::isLeapYear($year)) {
+            if (($month != 12) || ($day != 30) || ! self::isLeapYear($year)) {
                 return false;
             }
         }
@@ -500,7 +556,7 @@ class DateTime
      * Get date/time information (jalali equivalent of php getdate() function).
      *
      * @param int $timestamp [optional] The optional timestamp parameter is an integer Unix timestamp
-     *                       that defaults to the current local time if a timestamp is not given.
+     *                       that defaults to the current local time if a timestamp is not given
      *
      * @return array Returns an associative array of information related to the timestamp.
      *               See the link below for more information
@@ -519,8 +575,8 @@ class DateTime
         );
 
         return [
-            0         => $timestamp, 'seconds' => $seconds, 'minutes' => $minutes, 'hours' => $hours,
-            'mday'    => $mday, 'wday' => $wday, 'mon' => $mon, 'year' => $year, 'yday' => $yday,
+            0 => $timestamp, 'seconds' => $seconds, 'minutes' => $minutes, 'hours' => $hours,
+            'mday' => $mday, 'wday' => $wday, 'mon' => $mon, 'year' => $year, 'yday' => $yday,
             'weekday' => $weekday, 'month' => $month,
         ];
     }
@@ -571,9 +627,9 @@ class DateTime
         }
 
         return [
-            'jyear'  => $jy,
+            'jyear' => $jy,
             'jmonth' => $i + 1,
-            'jday'   => $j_day_no + 1,
+            'jday' => $j_day_no + 1,
         ];
     }
 
@@ -632,9 +688,9 @@ class DateTime
         }
 
         return [
-            'gyear'  => $gy,
+            'gyear' => $gy,
             'gmonth' => $i + 1,
-            'gday'   => $g_day_no + 1,
+            'gday' => $g_day_no + 1,
         ];
     }
 
@@ -702,7 +758,7 @@ class DateTime
      */
     public static function getMonthName($month, $opt = ['full_name' => true, 'in_persian' => true])
     {
-        $full_name = !(isset($opt) && is_array($opt) && array_key_exists('full_name', $opt)) || $opt['full_name'];
+        $full_name = ! (isset($opt) && is_array($opt) && array_key_exists('full_name', $opt)) || $opt['full_name'];
         $get_in_persian = isset($opt) && is_array($opt) && array_key_exists('in_persian', $opt) ? $opt['in_persian'] : true;
         $month = (int) $month;
 
